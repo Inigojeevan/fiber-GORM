@@ -10,14 +10,12 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-type DbInstance struct {
-	Db *gorm.DB
-}
-
-var Database DbInstance
+var (
+	DB *gorm.DB
+)
 
 func ConnectDb() {
-	db, err := gorm.Open(sqlite.Open("api."), &gorm.Config{})
+	db, err := gorm.Open(sqlite.Open("api.db"), &gorm.Config{})
 
 	if err != nil {
 		log.Fatal("Failed to create database \n", err.Error())
@@ -28,7 +26,5 @@ func ConnectDb() {
 
 	db.AutoMigrate(&models.Order{}, &models.Products{}, &models.User{})
 
-	Database = DbInstance{
-		Db: db,
-	}
+	DB = db
 }
