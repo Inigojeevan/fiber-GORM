@@ -17,7 +17,7 @@ type DbInstance struct {
 var Database DbInstance
 
 func ConnectDb() {
-	db, err := gorm.Open(sqlite.Open("api.db"), &gorm.Config{})
+	db, err := gorm.Open(sqlite.Open("api."), &gorm.Config{})
 
 	if err != nil {
 		log.Fatal("Failed to create database \n", err.Error())
@@ -27,4 +27,8 @@ func ConnectDb() {
 	db.Logger = logger.Default.LogMode(logger.Info) //logger settings
 
 	db.AutoMigrate(&models.Order{}, &models.Products{}, &models.User{})
+
+	Database = DbInstance{
+		Db: db,
+	}
 }
