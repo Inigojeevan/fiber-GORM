@@ -7,13 +7,14 @@ import (
 )
 
 type User struct {
+	//this type can be used to display the necessary info
 	ID        uint   `json:"id"`
 	FirstName string `json:"first_name"`
 	LastName  string `json:"last_name"`
 }
 
-func CreateResponseUser(user models.User) User {
-	return User{ID: user.ID, FirstName: user.FirstName, LastName: user.LastName}
+func CreateResponseUser(userModel models.User) User {
+	return User{ID: userModel.ID, FirstName: userModel.FirstName, LastName: userModel.LastName}
 }
 
 func CreateUser(c *fiber.Ctx) error {
@@ -26,4 +27,15 @@ func CreateUser(c *fiber.Ctx) error {
 	database.Database.Db.Create(&user)
 	responseUser := CreateResponseUser(user)
 	return c.Status(200).JSON(responseUser)
+}
+func GetAllUsers(c *fiber.Ctx) error {
+	users := []models.User{}
+
+	database.Database.Db.Find(&users)
+	responseUsers := []User{}    //used for only needed things(slice)
+	for _, user := range users { //new variable user
+		responseUser := CreateResponseUser(user)
+		responseUsers = append(responseUsers, responseUser)
+	}
+	return c.Status(200).JSON(responseUsers)
 }
