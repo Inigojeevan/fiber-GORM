@@ -91,7 +91,7 @@ func UpdateUser(c *fiber.Ctx) error {
 
 	database.Database.Db.Save(&user)
 	responseUser := CreateResponseUser(user)
-	return c.Status(400).JSON(responseUser)
+	return c.Status(200).JSON(responseUser)
 }
 
 func DeleteUser(c *fiber.Ctx) error {
